@@ -62,23 +62,23 @@ class CustomORM:
         return self.cursor.fetchall()
 
     def insert(self, table_name, values):
-        placeholders = ', '.join(['?' for _ in range(len(values))])
+        placeholders = ', '.join(['%s' for _ in range(len(values))])
         query = f'INSERT INTO {table_name} VALUES ({placeholders})'
         self.cursor.execute(query, values)
         self.conn.commit()
 
     def filter_like(self, table_name, column, pattern, columns='*'):
-        query = f'SELECT {columns} FROM {table_name} WHERE {column} LIKE ?'
+        query = f'SELECT {columns} FROM {table_name} WHERE {column} LIKE %s'
         self.cursor.execute(query, (pattern,))
         return self.cursor.fetchall()
 
     def filter_ilike(self, table_name, column, pattern, columns='*'):
-        query = f'SELECT {columns} FROM {table_name} WHERE {column} ILIKE ?'
+        query = f'SELECT {columns} FROM {table_name} WHERE {column} ILIKE %s'
         self.cursor.execute(query, (pattern,))
         return self.cursor.fetchall()
 
     def filter_in(self, table_name, column, values, columns='*'):
-        placeholders = ', '.join(['?' for _ in range(len(values))])
+        placeholders = ', '.join(['%s' for _ in range(len(values))])
         query = f'SELECT {columns} FROM {table_name} WHERE {column} IN ({placeholders})'
         self.cursor.execute(query, values)
         return self.cursor.fetchall()
